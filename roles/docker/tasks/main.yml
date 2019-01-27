@@ -1,0 +1,12 @@
+---
+
+# Based on this Ansible role: https://github.com/mongrelion/ansible-role-docker
+
+- name: Gather variables for each operating system
+  include_vars: "{{ item }}"
+  with_items: "{{ ansible_os_family | lower }}.yml"
+  tags:
+    - always
+
+- include_tasks: debian.yml
+  when: ansible_distribution == 'Debian'

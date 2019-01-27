@@ -1,0 +1,4 @@
+---
+
+docker_repo_distribution: "{{ ansible_distribution | lower }}"
+docker_version: "latest"

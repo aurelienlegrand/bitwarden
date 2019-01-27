@@ -1,0 +1,35 @@
+---
+
+- name: install system dependencies
+  package:
+    name: "{{ item }}"
+    state: present
+  register: __ret
+  retries: 5
+  until: __ret is succeeded
+  with_items: "{{ docker_dependencies }}"
+  become: true
+
+- name: add GPG key
+  apt_key:
+    url: "https://download.docker.com/linux/{{ docker_repo_distribution }}/gpg"
+    state: present
+  become: true
+
+- name: add docker repository | Debian
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/{{ docker_repo_distribution }} {{ ansible_distribution_release }} stable"
+    state: present
+  become: true
+
+- name: Install docker
+  package:
+    name: "{{ docker_package }}"
+    state: "{{ (docker_version == 'latest') | ternary('latest', 'present') }}"
+    update_cache: true
+  register: __ret
+  retries: 10
+  until: __ret is succeeded
+  notify:
+    - restart docker
+  become: true
