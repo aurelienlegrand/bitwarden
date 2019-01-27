@@ -3,11 +3,6 @@ bitwarden credentials manager hosting
 
 ## Usage
 
-Install requirements:
-```
-ansible-galaxy install -r requirements.yml
-```
-
 Use the following to copy your public key to the host instances: 
 ```
 ssh-keygen
